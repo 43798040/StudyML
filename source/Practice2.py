@@ -81,7 +81,9 @@ print(scores.mean())
 
 import graphviz
 import sklearn.tree as tree
-dot_data = tree.export_graphviz(default_tree, out_file=None,
+two_tree = DecisionTreeClassifier(criterion='entropy', max_depth=50)
+two_tree.fit(X, Y)
+dot_data = tree.export_graphviz(two_tree, out_file=None,
                                 filled=True, rounded=True,
                                 special_characters=True)
 graph = graphviz.Source(dot_data)
@@ -94,8 +96,8 @@ from sklearn.datasets import load_iris
 from sklearn.tree import DecisionTreeClassifier
 
 # Parameters
-n_classes = 3
-plot_colors = "ryb"
+n_classes = 2
+plot_colors = "rb"
 plot_step = 0.02
 
 for pairidx, pair in enumerate([[0, 1], [0, 2], [0, 3],
@@ -104,7 +106,7 @@ for pairidx, pair in enumerate([[0, 1], [0, 2], [0, 3],
     X = data.iloc[:, pair]
 
     # Train
-    clf = DecisionTreeClassifier().fit(X, Y)
+    clf = DecisionTreeClassifier(criterion='entropy', max_depth=50).fit(X, Y)
 
     # Plot the decision boundary
     plt.subplot(2, 3, pairidx + 1)
@@ -117,13 +119,13 @@ for pairidx, pair in enumerate([[0, 1], [0, 2], [0, 3],
 
     Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
-    cs = plt.contourf(xx, yy, Z, cmap=plt.cm.RdYlBu)
+    cs = plt.contourf(xx, yy, Z, cmap=plt.cm.RdBu)
 
     # Plot the training points
     for i, color in zip(range(n_classes), plot_colors):
         idx = np.where(Y == i)
-        plt.scatter(X.iloc[idx, 0], X.iloc[idx, 1], c=color,
-                    cmap=plt.cm.RdYlBu, edgecolor='black', s=15)
+        plt.scatter(X.values[idx, 0], X.values[idx, 1], c=color,
+                    cmap=plt.cm.RdBu, edgecolor='black', s=15)
 
 plt.suptitle("Decision surface of a decision tree using paired features")
 plt.axis("tight")
