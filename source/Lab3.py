@@ -51,9 +51,25 @@ default = DecisionTreeClassifier()
 scores = cross_val_score(estimator=default, X=X, y=Y, scoring="accuracy", cv=5)
 print(scores)
 print(scores.mean())
+param = {'criterion':('gini', 'entropy'), 'splitter':('best', 'random'),
+         'max_depth':range(2, 10, 1), 'max_leaf_nodes':range(5, 50, 1)}
+
+ModelEvaluation = GridSearchCV(default, param, scoring='accuracy', cv=5)
+ModelEvaluation.fit(X, Y)
+print(ModelEvaluation.best_params_)
+print(ModelEvaluation.best_score_)
 
 from sklearn.linear_model import LogisticRegression
 default = LogisticRegression()
 scores = cross_val_score(estimator=default, X=X, y=Y, scoring="accuracy", cv=5)
 print(scores)
 print(scores.mean())
+param = {'fit_intercept':(True, False), 'intercept_scaling':(True, False),
+         'class_weight':(None, 'balanced'), 'solver':('newton-cg', 'lbfgs', 'sag', 'saga'),
+         'multi_class':('ovr', 'multinomial'),
+         'max_iter':range(1, 200, 1)}
+
+ModelEvaluation = GridSearchCV(default, param, scoring='accuracy', cv=5)
+ModelEvaluation.fit(X, Y)
+print(ModelEvaluation.best_params_)
+print(ModelEvaluation.best_score_)
